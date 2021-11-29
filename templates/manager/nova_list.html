@@ -1,0 +1,10 @@
+{% load static %}
+{% block head %}
+    <meta http-equiv="refresh" content="30">
+    <script src={% static 'jquery-3.6.0.min.js' %}></script>
+    <link rel="stylesheet" href={% static 'tablesorter-master/css/theme.dropbox.min.css' %}>
+    <script type="text/javascript" src={% static 'tablesorter-master/js/jquery.tablesorter.js' %}></script>
+    <script type="text/javascript" src={% static 'tablesorter-master/js/jquery.tablesorter.widgets.js' %}></script>
+    <script type="text/javascript" src={% static 'tablesorter_config.js' %}></script>
+{% endblock head %}
+{% include "django_tables2/table.html" %}

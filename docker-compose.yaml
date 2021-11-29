@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+  nginx:
+    container_name: NovaManagerNginx
+    image: nginx:1.21
+    volumes:
+      - static_volume:/app/staticfiles
+      - ./nginx/:/etc/nginx/conf.d
+    ports:
+      - 80:80
+    depends_on:
+      - api
+
+  api:
+    container_name: NovaManagerBackend
+    image: marquesluis/novamanager:latest
+    volumes:
+      - static_volume:/app/staticfiles
+    restart: always
+    env_file:
+      - ./.env.prod
+    expose:
+      - 8000
+    depends_on:
+      - api_db
+
+  api_db:
+    container_name: NovaManagerDatabase
+    image: mysql:5.7
+    env_file:
+      - ./.env.prod
+    volumes:
+      - nova_api_data:/var/lib/mysql
+    restart: always
+
+
+volumes:
+  nova_api_data:
+  static_volume:
