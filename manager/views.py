@@ -80,7 +80,7 @@ class TurnOnView(APIView):
         nc.servers.unshelve(instance)
 
         while True:
-            time.sleep(1)
+            time.sleep(0.5)
             server = nc.servers.get(instance)
             if "ACTIVE" in server.status:
                 break
@@ -111,7 +111,7 @@ class TurnOffView(APIView):
         nc.servers.shelve(instance)
 
         while True:
-            time.sleep(1)
+            time.sleep(0.5)
             server = nc.servers.get(instance)
             if "SHELVED" in server.status:
                 break
