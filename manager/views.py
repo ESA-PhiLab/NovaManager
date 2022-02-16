@@ -1,7 +1,7 @@
 import time
-from datetime import datetime
 
 import django_tables2 as tables
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 from rest_framework.views import APIView
 
@@ -25,40 +25,47 @@ class MachinesView(tables.SingleTableView):
         servers = nc.servers.list()
         result = []
         for serv in servers:
-            if (
-                self.request.user.is_staff
-                or Machine.objects.get(pk=serv.id)
-                .users.filter(id=self.request.user.id)
-                .exists()
-            ):
-                serv_data = {"name": serv.name, "status": serv.status, "id": serv.id}
-                ips = {}
-                for network in serv.networks:
-                    if network == "eodata":
-                        continue
-                    else:
-                        _ips = list(
-                            filter(
-                                lambda x: not x.startswith("192"),
-                                serv.networks[network],
+            try:
+                if (
+                    self.request.user.is_staff
+                    or Machine.objects.get(pk=serv.id)
+                    .users.filter(id=self.request.user.id)
+                    .exists()
+                ):
+                    serv_data = {
+                        "name": serv.name,
+                        "status": serv.status,
+                        "id": serv.id,
+                    }
+                    ips = {}
+                    for network in serv.networks:
+                        if network == "eodata":
+                            continue
+                        else:
+                            _ips = list(
+                                filter(
+                                    lambda x: not x.startswith("192"),
+                                    serv.networks[network],
+                                )
                             )
-                        )
-                        if _ips:
-                            ips[network] = _ips
-                            serv_data["networks"] = _ips
+                            if _ips:
+                                ips[network] = _ips
+                                serv_data["networks"] = _ips
 
-                updated_time = "-"
-                last_restart = "-"
-                link = "Turn On"
-                if serv.status == "ACTIVE":
-                    updated_time = get_delta_to_now(serv.updated)
-                    last_restart = get_hours_to_now(serv.updated)
-                    link = "Turn Off"
-                serv_data["link"] = link
-                serv_data["updated"] = updated_time
-                serv_data["last_restart"] = last_restart
+                    updated_time = "-"
+                    last_restart = "-"
+                    link = "Turn On"
+                    if serv.status == "ACTIVE":
+                        updated_time = get_delta_to_now(serv.updated)
+                        last_restart = get_hours_to_now(serv.updated)
+                        link = "Turn Off"
+                    serv_data["link"] = link
+                    serv_data["updated"] = updated_time
+                    serv_data["last_restart"] = last_restart
 
-                result.append(serv_data)
+                    result.append(serv_data)
+            except ObjectDoesNotExist:
+                continue
         return result
 
 
