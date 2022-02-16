@@ -12,4 +12,4 @@ fi
 
 
 echo "Starting server"
-gunicorn --bind :8000 --workers 2 --access-logfile - vmmanager.wsgi:application
+gunicorn --bind :8000 --workers 2 --timeout 90 --access-logfile - vmmanager.wsgi:application

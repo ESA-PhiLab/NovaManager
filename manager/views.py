@@ -80,7 +80,7 @@ class TurnOnView(APIView):
         nc.servers.unshelve(instance)
 
         while True:
-            time.sleep(0.5)
+            time.sleep(5)
             server = nc.servers.get(instance)
             if "ACTIVE" in server.status:
                 break
@@ -90,7 +90,9 @@ class TurnOnView(APIView):
 
     def delete_older_images(self, gc, server):
         images = [
-            {"id": img["id"], "created_at": img["created_at"], "name": img["name"]}
+            {"id": img["id"],
+             "created_at": img["created_at"],
+             "name": img["name"]}
             for img in gc.images.list()
             if server.human_id + "-shelved" in img.name
         ]
@@ -111,7 +113,7 @@ class TurnOffView(APIView):
         nc.servers.shelve(instance)
 
         while True:
-            time.sleep(0.5)
+            time.sleep(5)
             server = nc.servers.get(instance)
             if "SHELVED" in server.status:
                 break
