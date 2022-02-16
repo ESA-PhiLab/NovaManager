@@ -12,4 +12,4 @@ fi
 
 
 echo "Starting server"
-gunicorn --config ./gunicorn.conf.py vmmanager.wsgi:application
+gunicorn --config /app/scripts/gunicorn.conf.py vmmanager.wsgi:application
