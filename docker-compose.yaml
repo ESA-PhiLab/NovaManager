@@ -4,6 +4,7 @@ services:
   nginx:
     container_name: NovaManagerNginx
     image: nginx:1.21
+    restart: always
     volumes:
       - static_volume:/app/staticfiles
       - ./nginx/:/etc/nginx/conf.d

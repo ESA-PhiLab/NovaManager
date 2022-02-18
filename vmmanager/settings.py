@@ -140,13 +140,13 @@ STATICFILES_DIRS = (BASE_DIR / "static_dev",)  # TODO MOVE OUT OF MAIN FOLDER
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# https://d49d8286c4bc46cb9e665222ceceef72@o1140442.ingest.sentry.io/6197655
 sentry_dsn = os.getenv("SENTRY_DSN", "")
+traces_sample_rate = os.getenv("SENTRY_TRACES_SAMPLE_RATE", 0.01)
 if sentry_dsn:
     sentry_sdk.init(
         dsn=sentry_dsn,
         integrations=[DjangoIntegration()],
-        traces_sample_rate=1,
+        traces_sample_rate=traces_sample_rate,
         send_default_pii=True,
         ca_certs=os.getenv("CA_CERTS_PATH", None),
     )

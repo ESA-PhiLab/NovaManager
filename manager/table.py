@@ -26,7 +26,7 @@ class NovaTable(tables.Table):
     )
     last_restart = tables.columns.TemplateColumn(
         template_code="""{{ record.last_restart }}""",
-        verbose_name="Last Start",
+        verbose_name="Last Start (hours passed)",
         orderable=False,
     )
 
