@@ -15,6 +15,7 @@ class OpenstackAuthenticator:
     @abc.abstractmethod
     def authenticate(self):
         self.session = keystoneauth1.session.Session(auth=self._auth())
+        keystoneauth1.session.Session
 
     @abc.abstractmethod
     def _auth(self):
