@@ -10,7 +10,7 @@ COPY . .
 
 RUN pip install --upgrade pip &&  \
     apt-get update &&\
-    apt-get install -y --no-install-recommends gcc libc-dev python3-dev netcat &&\
+    apt-get install -y --no-install-recommends gcc libc-dev python3-dev netcat-openbsd &&\
     pip install --no-cache-dir -r requirements.txt &&\
     mkdir /app/staticfiles &&\
     python manage.py collectstatic --no-input --clear &&\
