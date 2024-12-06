@@ -2,20 +2,24 @@ import abc
 import os
 import logging
 
-import keystoneclient
-import keystoneauth1
-import glanceclient
-import novaclient
+import keystoneclient.auth.identity
+import keystoneclient.client
+import keystoneauth1.session
+import keystoneauth1.identity.v3
+
+import glanceclient.client
+import novaclient.client
 
 
 class OpenstackAuthenticator:
     def __init__(self):
         self.auth_url = os.getenv("OS_AUTH_URL")
     
-    @abc.abstractmethod
     def authenticate(self):
         self.session = keystoneauth1.session.Session(auth=self._auth())
-        keystoneauth1.session.Session
+        # get a keystone client
+        #self.kc = keystoneclient.client.Client("3", session=self.session, auth_url=self.session.auth.auth_url)
+        self.kc = keystoneclient.client.Client(session=self.session)        
 
     @abc.abstractmethod
     def _auth(self):
@@ -58,10 +62,7 @@ class OpenstackAuthenticatorPassword(OpenstackAuthenticator):
     def authenticate(self):
         super().authenticate()
 
-        # get a keystone client
-        self.kc = keystoneclient.client.Client("3", session=self.session, auth_url=self.session.auth.auth_url)
-
-        # and authenticate it
+        # and authenticate the client
         self.kc.authenticate(
             token=self.sess.get_auth_headers()["X-Auth-Token"],
             project_id=self.session.get_project_id(),
@@ -84,12 +85,6 @@ class OpenstackAuthenticatorApplicationCredentials(OpenstackAuthenticator):
                 auth_url=self.auth_url,
                 auth_methods=[application_credential]
         )
-    
-    def authenticate(self):
-        super().authenticate()
-
-        # get a keystone client
-        self.kc = keystoneclient.v3.client.Client(session=self.session)        
 
 
 class AuthenticatedClient():
