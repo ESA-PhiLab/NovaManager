@@ -9,8 +9,8 @@ from manager.models import Machine
 from manager.permissions import IsOwnerOrAdminUser
 from manager.table import NovaTable
 from utils.openstack import (
+    OpenstackAuthenticator,
     AuthenticatedNovaClient,
-    OpenstackAuth,
     AuthenticatedGlanceClient,
 )
 from utils.utils import get_delta_to_now, get_hours_to_now
@@ -21,7 +21,7 @@ class MachinesView(tables.SingleTableView):
     template_name = "manager/nova_list.html"
 
     def get_queryset(self):
-        nc = AuthenticatedNovaClient().nc
+        nc = AuthenticatedNovaClient().client
         servers = nc.servers.list()
         result = []
         for serv in servers:
@@ -73,9 +73,9 @@ class TurnOnView(APIView):
     permission_classes = [IsOwnerOrAdminUser]
 
     def get(self, request, instance):
-        auth = OpenstackAuth()
-        nc = AuthenticatedNovaClient(auth).nc
-        gc = AuthenticatedGlanceClient(auth).gc
+        authenticator = OpenstackAuthenticator.get_authenticator()
+        nc = AuthenticatedNovaClient(authenticator).client
+        gc = AuthenticatedGlanceClient(authenticator).client
 
         nc.servers.unshelve(instance)
 
@@ -108,7 +108,7 @@ class TurnOffView(APIView):
 
     def get(self, request, instance):
 
-        nc = AuthenticatedNovaClient().nc
+        nc = AuthenticatedNovaClient().client
 
         nc.servers.shelve(instance)
 

@@ -7,7 +7,7 @@ django.setup()
 from manager.models import Machine
 from utils.openstack import AuthenticatedNovaClient
 
-nc = AuthenticatedNovaClient().nc
+nc = AuthenticatedNovaClient().client
 servers = nc.servers.list()
 
 set_ids = set()
