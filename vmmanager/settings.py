@@ -31,7 +31,7 @@ DEBUG = os.getenv("DEBUG", "N").lower() in ["true", "1", "t", "y", "yes"]
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1").split(",")
 
 CSRF_TRUSTED_ORIGINS = []
-for i in os.getenv("CSRF_TRUSTED_ORIGINS").split(","):
+for i in os.getenv("CSRF_TRUSTED_ORIGINS", "127.0.0.1").split(","):
     CSRF_TRUSTED_ORIGINS.extend(("http://" + i, "https://" + i))
 
 LOGIN_REDIRECT_URL = "/"
