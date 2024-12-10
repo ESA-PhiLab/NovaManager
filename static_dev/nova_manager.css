@@ -1,0 +1,12 @@
+div#nova-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px 15px 10px;
+    font: 13px / 32px "Open Sans", "lucida grande", "Segoe UI", arial, verdana, "lucida sans unicode", tahoma, sans-serif;
+    color: #2281cf;
+}
+
+div#nova-header a {
+    color: #2281cf;
+}

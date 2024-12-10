@@ -1,0 +1,10 @@
+<div id="nova-header">
+    {% if user.is_staff %}
+        <a id="admin" href="{% url 'admin:index' %}">Admin Dashboard</a>
+    {% endif %}
+    <p></p>
+    <form id="logout" method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <a href="#" onclick="$(this).closest('form').submit();">Logout</a>
+    </form>
+</div>

@@ -30,7 +30,12 @@ DEBUG = os.getenv("DEBUG", "N").lower() in ["true", "1", "t", "y", "yes"]
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1").split(",")
 
+CSRF_TRUSTED_ORIGINS = []
+for i in ALLOWED_HOSTS:
+    CSRF_TRUSTED_ORIGINS.extend(("http://" + i, "https://" + i))
+
 LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Application definition
 
@@ -132,8 +137,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = (BASE_DIR / "static_dev",)  # TODO MOVE OUT OF MAIN FOLDER
+STATIC_ROOT = BASE_DIR + "/staticfiles/"
+STATICFILES_DIRS = (BASE_DIR + "/static_dev",)  # TODO MOVE OUT OF MAIN FOLDER
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
