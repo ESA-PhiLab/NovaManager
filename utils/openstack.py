@@ -20,7 +20,8 @@ class OpenstackAuthenticator:
         self.session = keystoneauth1.session.Session(auth=self._auth())
         # get a keystone client
         #self.kc = keystoneclient.client.Client("3", session=self.session, auth_url=self.session.auth.auth_url)
-        self.kc = keystoneclient.client.Client(session=self.session, region_name=self.region)        
+        #self.kc = keystoneclient.client.Client(session=self.session, region_name=self.region)
+        self.kc = keystoneclient.client.Client(session=self.session)        
 
     @abc.abstractmethod
     def _auth(self):
