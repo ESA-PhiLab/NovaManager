@@ -14,13 +14,10 @@ import novaclient.client
 class OpenstackAuthenticator:
     def __init__(self):
         self.auth_url = os.getenv("OS_AUTH_URL")
-        self.region_name = os.getenv("OS_REGION_NAME")
     
     def authenticate(self):
         self.session = keystoneauth1.session.Session(auth=self._auth())
-        # get a keystone client
-        #self.kc = keystoneclient.client.Client("3", session=self.session, auth_url=self.session.auth.auth_url)
-        self.kc = keystoneclient.client.Client(session=self.session, region_name=self.region_name)
+        self.kc = keystoneclient.client.Client(session=self.session)
 
     @abc.abstractmethod
     def _auth(self):
@@ -90,6 +87,8 @@ class OpenstackAuthenticatorApplicationCredentials(OpenstackAuthenticator):
 
 class AuthenticatedClient():
     def __init__(self, authenticator: OpenstackAuthenticator = None):
+        self.region_name = os.getenv("OS_REGION_NAME")
+
         self.authenticator = authenticator or OpenstackAuthenticator.get_authenticator()
         self.authenticator.authenticate()
         self.client = self.create_client()
@@ -101,7 +100,7 @@ class AuthenticatedClient():
 
 class AuthenticatedNovaClient(AuthenticatedClient):
     def create_client(self):
-        return novaclient.client.Client("2", session=self.authenticator.session)
+        return novaclient.client.Client("2", session=self.authenticator.session, region_name=self.region_name)
 
 
 class AuthenticatedGlanceClient(AuthenticatedClient):
