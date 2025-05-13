@@ -14,13 +14,13 @@ import novaclient.client
 class OpenstackAuthenticator:
     def __init__(self):
         self.auth_url = os.getenv("OS_AUTH_URL")
-        self.region = os.getenv("OS_REGION")
+        self.region_name = os.getenv("OS_REGION_NAME")
     
     def authenticate(self):
         self.session = keystoneauth1.session.Session(auth=self._auth())
         # get a keystone client
         #self.kc = keystoneclient.client.Client("3", session=self.session, auth_url=self.session.auth.auth_url)
-        self.kc = keystoneclient.client.Client(session=self.session, region_name=self.region)
+        self.kc = keystoneclient.client.Client(session=self.session, region_name=self.region_name)
 
     @abc.abstractmethod
     def _auth(self):
